@@ -13,6 +13,15 @@ class Vehicle(ABC):
         self.__available = True   # private(Encapsulation concept)
 
 
+    def display_details(self):
+        status = "Available" if self.is_available() else "Rented"
+        print(f"Type :                 {type(self).__name__}")
+        print(f"Registration :         {self.registration_number}")
+        print(f"Vehicle :              {self.make} {self.model} ({self.year})")
+        print(f"Daily Rate :           Ksh {self.daily_rate:,}")
+        print(f"Status :               {status}")
+
+    
     def is_available(self):
         return self.__available
 
@@ -22,13 +31,7 @@ class Vehicle(ABC):
     def mark_as_available(self):
         self.__available = True
 
-    def display_details(self):
-        status = "Available" if self.is_available() else "Rented"
-        print(f"Type :                 {type(self).__name__}")
-        print(f"Registration :         {self.registration_number}")
-        print(f"Vehicle :              {self.make} {self.model} ({self.year})")
-        print(f"Daily Rate :           Ksh {self.daily_rate:,}")
-        print(f"Status :               {status}")
+    
 
     @abstractmethod
     def calculate_rental_cost(self,days):
