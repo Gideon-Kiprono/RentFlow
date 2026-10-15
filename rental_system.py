@@ -73,6 +73,9 @@ class CarRentalSystem:
 
     def return_vehicle(self, rental, actual_days, damage_charge=0):
         # Rule 7: the vehicle must currently be rented
+        
+        if rental.status == "COMPLETED":
+            raise ValueError("This rental has already been completed.")
         if rental.vehicle.is_available():
             raise ValueError("This vehicle is not currently rented.")
 
