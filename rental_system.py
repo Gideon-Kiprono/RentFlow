@@ -1,5 +1,7 @@
 
 from rental import Rental
+from vehicle import EconomyCar, SUV, LuxuryCar
+
 class CarRentalSystem:
     def __init__(self, name):
         self.name = name
@@ -45,6 +47,30 @@ class CarRentalSystem:
             if vehicle.is_available():
                 vehicle.display_details()
                 print("--------")
+
+
+    def search_vehicles(self, vehicle_type=None, max_daily_rate=None):
+            types = {"Economy": EconomyCar, "SUV": SUV, "Luxury": LuxuryCar}
+
+            if vehicle_type is not None and vehicle_type not in types:
+                raise ValueError(f"Unknown vehicle type: {vehicle_type}")
+
+            found = False
+            for vehicle in self.vehicles:
+                if not vehicle.is_available():
+                    continue
+                if vehicle_type is not None and not isinstance(vehicle, types[vehicle_type]):
+                    continue
+                if max_daily_rate is not None and vehicle.daily_rate > max_daily_rate:
+                    continue
+
+                found = True
+                print(f"{vehicle.make} {vehicle.model}")
+                print(f"   Registration: {vehicle.registration_number}")
+                print(f"   Rate: KSh {vehicle.daily_rate:,}/day")
+
+            if not found:
+                print("No vehicles match your search.")
         
 
 
@@ -84,3 +110,39 @@ class CarRentalSystem:
 
         # Only then free the car
         rental.vehicle.mark_as_available()
+
+
+
+
+
+    def show_active_rentals(self):
+        print("ACTIVE RENTALS")
+        found = False
+        for rental in self.rentals:
+            if rental.status == "ACTIVE":
+                found = True
+                print(f"{rental.rental_id}: {rental.customer.name} has "
+                f"{rental.vehicle.make} {rental.vehicle.model}"
+                f"({rental.vehicle.registration_number}) for "
+                f"{rental.rental_days} days")
+        if not found:
+            print("No active rentals")
+
+
+    def show_completed_rentals(self):
+        print("COMPLETED RENTALS")
+        found = False
+        for rental in self.rentals:
+            if rental.status == "COMPLETED":
+                found = True
+                print(f"{rental.rental_id}: {rental.customer.name} has "
+                      f"{rental.vehicle.make} {rental.vehicle.model}"
+                      f"({rental.vehicle.registration_number}) for "
+                      f"{rental.rental_days} days "
+                      f"total KSh {rental.calculate_total():,}, paid: {rental.is_paid()}")
+        if not found:
+            print("No active rentals")
+                      
+
+
+

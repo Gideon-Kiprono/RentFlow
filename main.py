@@ -201,3 +201,17 @@ try:
     system.return_vehicle(rental1, actual_days=6)
 except ValueError as error:
     print(f"Error: {error}")
+
+    system.rent_vehicle(john, axio, 3)
+
+# part c test
+system.search_vehicles(vehicle_type="SUV")
+system.search_vehicles(vehicle_type="SUV", max_daily_rate=6500)   # no SUVs under 6,500 in your fleet
+system.search_vehicles(max_daily_rate=1000)                       # expect "no vehicles match"
+try:
+    system.search_vehicles(vehicle_type="Boat")
+except ValueError as error:
+    print(f"Error: {error}")
+
+system.show_active_rentals()       # the Axio rental
+system.show_completed_rentals()    # the Prado rental
