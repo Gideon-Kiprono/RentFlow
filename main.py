@@ -120,16 +120,20 @@
 
 # rental.display_rental_details()
 
-#  ===Testing the rental_system.py logic
+# #  ===Testing the rental_system.py logic
 from vehicle import EconomyCar,SUV
 from customer import Customer
 from rental_system import CarRentalSystem
 
+axio = EconomyCar("KDK 123A", "Toyota", "Axio", 2022, 4000)
+prado = SUV("KDJ 465B", "Toyota", "Prado", 2023, 8000)
+john = Customer("C001", "John Kamau", "0712345678", "12345678", "DL45821")
+
 
 system = CarRentalSystem("SafariDrive Rentals")
-system.add_vehicle(EconomyCar("KDK 123A", "Toyota", "Axio", 2022, 4000))
-system.add_vehicle(SUV("KDJ 465B", "Toyota", "Prado", 2023, 8000))
-system.register_customer(Customer("C001", "John Kamau", "0712345678", "12345678","DL45821"))
+system.add_vehicle(axio)
+system.add_vehicle(prado)
+system.register_customer(john)
 
 
 print(len(system.vehicles), len(system.customers))
@@ -163,5 +167,37 @@ except AttributeError as error:
 # duplicate check
 try:
     system.add_vehicle(EconomyCar("KDK 123A", "Toyota", "Vitz", 2020, 3500))
+except ValueError as error:
+    print(f"Error: {error}")
+
+
+
+# Testing part B of the rental.py system
+print("-"* 50)
+rental1 = system.rent_vehicle(john, prado, 4)
+print(prado.is_available())             # False
+print(len(system.rentals), len(john.rentals))   # 1 1
+
+# Rule 6: renting the same car again
+try:
+    system.rent_vehicle(john, prado, 2)
+except ValueError as error:
+    print(f"Error: {error}")
+
+# Rule 3: unregistered customer
+stranger = Customer("C099", "Not Registered", "0700000000", "11111111", "DL00000")
+try:
+    system.rent_vehicle(stranger, axio, 2)
+except ValueError as error:
+    print(f"Error: {error}")
+
+# Return late, car is freed
+system.return_vehicle(rental1, actual_days=6)
+print(prado.is_available())             # True
+print(rental1.calculate_total())        # 37200
+
+# Rule 8: returning twice
+try:
+    system.return_vehicle(rental1, actual_days=6)
 except ValueError as error:
     print(f"Error: {error}")

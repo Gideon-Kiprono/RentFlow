@@ -1,3 +1,5 @@
+
+from rental import Rental
 class CarRentalSystem:
     def __init__(self, name):
         self.name = name
@@ -49,3 +51,33 @@ class CarRentalSystem:
     @property
     def revenue(self):
         return self.__revenue
+
+
+    def rent_vehicle(self,customer, vehicle, days):
+        if not self.find_customer(customer.customer_id):
+            raise ValueError("Customer must be registered before renting")
+        if not self.find_vehicle(vehicle.registration_number):
+            raise ValueError("Vehicle must be registered before renting")
+        if days <= 0:
+            raise ValueError("Rental days must be greater than zero.")
+        if not vehicle.is_available():
+            raise ValueError("Vehicle must be available before renting")
+
+        rental_id = f"R{len(self.rentals) + 1:03d}"
+        rental = Rental(rental_id, customer, vehicle, days)
+        vehicle.mark_as_rented()
+        self.rentals.append(rental)
+        customer.add_rental(rental)
+        return rental
+        
+
+    def return_vehicle(self, rental, actual_days, damage_charge=0):
+        # Rule 7: the vehicle must currently be rented
+        if rental.vehicle.is_available():
+            raise ValueError("This vehicle is not currently rented.")
+
+        # Complete first: if it raises, the car must stay marked as rented
+        rental.complete_rental(actual_days, damage_charge)
+
+        # Only then free the car
+        rental.vehicle.mark_as_available()
