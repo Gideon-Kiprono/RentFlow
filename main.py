@@ -252,3 +252,33 @@ try:
     Payment(rental1)                                       # abstraction: must fail
 except TypeError as error:
     print(f"Error: {error}")
+
+payment = MpesaPayment(rental1, "0712345678")
+print(system.process_payment(payment))
+print(system.revenue)
+print(rental1.is_paid())
+
+
+# 1. Paying twice must fail (rental1 is now paid)
+try:
+    system.process_payment(CashPayment(rental1, 40000))
+except ValueError as error:
+    print(f"Error: {error}")
+
+# 2. An unreturned rental can't be paid
+active = system.rent_vehicle(john, axio, 2)
+try:
+    system.process_payment(MpesaPayment(active, "0712345678"))
+except ValueError as error:
+    print(f"Error: {error}")
+
+# 3. A failed payment changes nothing
+system.return_vehicle(active, actual_days=2)
+before = system.revenue
+print(system.process_payment(CashPayment(active, 100)))   # False
+print(system.revenue == before)                           # True
+print(active.is_paid())                                   # False
+
+# 4. The bypass experiment
+system.__revenue = 10_000_000
+print(system.revenue)                                     # still the real figure

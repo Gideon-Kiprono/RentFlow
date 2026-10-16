@@ -142,6 +142,23 @@ class CarRentalSystem:
                       f"total KSh {rental.calculate_total():,}, paid: {rental.is_paid()}")
         if not found:
             print("No active rentals")
+
+    def process_payment(self,payment):
+        if payment.rental.status  != "COMPLETED":
+            raise ValueError("A rental can only be paid after it is completed.")
+
+        if payment.rental.is_paid():
+            raise ValueError("This rental has already been paid.")
+
+        success = payment.process_payment()
+
+        if success:
+            payment.rental.mark_as_paid()
+            self.__revenue += payment.amount
+            self.payments.append(payment)
+
+
+        return success
                       
 
 
