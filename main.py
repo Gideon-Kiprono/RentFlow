@@ -215,3 +215,40 @@ except ValueError as error:
 
 system.show_active_rentals()       # the Axio rental
 system.show_completed_rentals()    # the Prado rental
+
+from payment import MpesaPayment
+from payment import CashPayment
+from payment import CardPayment
+
+print("-"*20)
+payment = MpesaPayment(rental1, "0712345678")
+print(payment.process_payment())
+
+print("-"*20)
+card_pay = CardPayment(rental1,"1020") 
+print(card_pay.process_payment())
+
+print("-"*20)
+payment2 = CashPayment(rental1, 40000)
+print(payment2.process_payment())  
+
+print("-"*20)
+payment3 = CashPayment(rental1, 20000)
+print(payment3.process_payment())  #not enough cash # False
+
+
+print("-"*20)
+print(CardPayment(rental1, "1020").process_payment())     # Card ending 1020 charged KSh 37,200, then True
+
+try:
+    CardPayment(rental1, "4417 8888 1234 5678")           # a full number should be refused
+except ValueError as error:
+    print(f"Error: {error}")
+
+print("-"*20)
+from payment import Payment
+
+try:
+    Payment(rental1)                                       # abstraction: must fail
+except TypeError as error:
+    print(f"Error: {error}")
