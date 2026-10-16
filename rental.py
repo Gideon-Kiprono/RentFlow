@@ -58,6 +58,11 @@ class Rental:
 
 
     def display_rental_details(self):
+
+        rental_charge = self.vehicle.daily_rate * self.rental_days
+        extra = self.vehicle.extra_charge(self.rental_days)
+
+
         print(f"=" * 36)
         print("           SAFARIDRIVE RENTALS")
         print(f"=" * 36)
@@ -67,7 +72,15 @@ class Rental:
         print(f"Registration:     {self.vehicle.registration_number}")
         print(f"Rental Period:    {self.rental_days} days")
         print(f"Daily Rate:       KSh {self.vehicle.daily_rate:,}")
-        print(f"Base Cost:        KSh {self.base_cost:,}")
+
+        
+        print()
+        print(f"Rental Charge:    KSh {rental_charge:,}")
+
+        if extra:
+            label,amount = extra
+            print(f"{label + ':':<17} KSh {amount:,}")
+        
         print(f"Late Fee:         KSh {self.late_fee:,}")
         print(f"Damage Charge:    KSh {self.damage_charge:,}")
         print("-" * 36)

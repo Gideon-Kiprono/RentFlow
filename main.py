@@ -283,4 +283,21 @@ except ValueError as error:
 system.__revenue = 10_000_000
 print(system.revenue)    
 
-system.generate_report()                                 # still the real figure
+system.generate_report()      
+
+print(axio.extra_charge(3))     # None
+print(prado.extra_charge(3))    # ('Service Charge', 2000)
+# print(merc.extra_charge(3))     # ('Insurance (10%)', 4500)
+# 
+from vehicle import EconomyCar, SUV, LuxuryCar
+from customer import Customer
+from rental import Rental
+
+john = Customer("C001", "John Kamau", "0712345678", "12345678", "DL45821")
+
+for car in [
+    EconomyCar("T1", "Toyota", "Axio", 2022, 4000),
+    SUV("T2", "Toyota", "Prado", 2023, 8000),
+    LuxuryCar("T3", "Mercedes-Benz", "E-Class", 2024, 15000),
+]:
+    Rental("R900", john, car, 3).display_rental_details()                           # still the real figure

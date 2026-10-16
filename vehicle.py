@@ -31,6 +31,9 @@ class Vehicle(ABC):
     def mark_as_available(self):
         self.__available = True
 
+    def extra_charge(self, days):
+        return None
+
     
 
     @abstractmethod
@@ -43,7 +46,8 @@ class EconomyCar(Vehicle):
 
     def calculate_rental_cost(self,days):
         return self.daily_rate * days
-            
+
+       
         
 
 # Child class (SUV)
@@ -54,7 +58,9 @@ class SUV(Vehicle):
     # calculate_rental_cost() method
     def calculate_rental_cost(self,days):
         return self.daily_rate * days + self.SERVICE_CHARGE
-       
+
+    def extra_charge(self, days):  
+            return ("Service Charge", self.SERVICE_CHARGE)
 
 # Child class (LUXURY)
 class LuxuryCar(Vehicle):
@@ -66,5 +72,9 @@ class LuxuryCar(Vehicle):
         rental_charge = self.daily_rate * days
         insurance = rental_charge * self.INSURANCE_RATE
         return round(rental_charge + insurance)
+
+    def extra_charge(self, days):
+        amount = round(self.daily_rate * days * self.INSURANCE_RATE)
+        return ("Insurance (10%)", amount)
 
 
