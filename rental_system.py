@@ -159,7 +159,39 @@ class CarRentalSystem:
 
 
         return success
-                      
 
+
+    def generate_report(self):
+        total_vehicles = len(self.vehicles)
+        available = sum(1 for v in self.vehicles if v.is_available())
+        rented = total_vehicles - available
+
+        active = sum(1 for r in self.rentals if r.status == "ACTIVE")
+        completed = sum(1 for r in self.rentals if r.status == "COMPLETED")
+        
+        economy = sum(1 for v in self.vehicles if isinstance(v, EconomyCar))
+        suvs = sum(1 for v in self.vehicles if isinstance(v, SUV))
+        luxury = sum(1 for v in self.vehicles if isinstance(v, LuxuryCar))
+
+        print("=" * 37)
+        print("    SAFARIDRIVE MANAGEMENT REPORT")
+        print("=" * 37)
+        print(f"Total Vehicles:        {total_vehicles:>10}")
+        print(f"Available Vehicles:    {available:>10}")
+        print(f"Rented Vehicles:       {rented:>10}")
+        print()
+        print(f"Registered Customers:  {len(self.customers):>10}")
+        print()
+        print(f"Total Rentals:         {len(self.rentals):>10}")
+        print(f"Active Rentals:        {active:>10}")
+        print(f"Completed Rentals:     {completed:>10}")
+        print()
+        print(f"Total Revenue:   KSh {self.revenue:>10,}")
+        print("-" * 37)
+        print("VEHICLES BY CATEGORY")
+        print(f"Economy Cars:          {economy:>10}")
+        print(f"SUVs:                  {suvs:>10}")
+        print(f"Luxury Cars:           {luxury:>10}")
+        print("=" * 37)
 
 
