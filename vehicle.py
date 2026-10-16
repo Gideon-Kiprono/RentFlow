@@ -18,7 +18,7 @@ class Vehicle(ABC):
         print(f"Type :                 {type(self).__name__}")
         print(f"Registration :         {self.registration_number}")
         print(f"Vehicle :              {self.make} {self.model} ({self.year})")
-        print(f"Daily Rate :           Ksh {self.daily_rate:,}")
+        print(f"Daily Rate :           KSh {self.daily_rate:,}")
         print(f"Status :               {status}")
 
     
